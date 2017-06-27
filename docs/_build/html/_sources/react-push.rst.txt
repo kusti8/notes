@@ -20,6 +20,8 @@ Client Side
 
 Get the ID:
 
+https://www.digitalocean.com/community/tutorials/how-to-create-a-server-to-send-push-notifications-with-gcm-to-android-devices-using-python
+
 
     We need to create a Google API project to enable GCM for our app.
 
