@@ -10,6 +10,7 @@ Welcome to kusti8's notes's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   react
    react-push
 
 

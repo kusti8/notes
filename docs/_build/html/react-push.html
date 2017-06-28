@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to kusti8’s notes’s documentation!" href="index.html" />
+    <link rel="prev" title="React Native - General" href="react.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,115 +44,153 @@
             
   <div class="section" id="react-native-push-notifications">
 <h1>React Native - Push Notifications<a class="headerlink" href="#react-native-push-notifications" title="Permalink to this headline">¶</a></h1>
-<p>(Android only!!!)</p>
 <p>I’m going to use Batch to make things easier.</p>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>npm install --save react-native-push-notification
 react-native link
-pip install pyfcm
+pip install python-gcm apns
 </pre></div>
 </div>
 </div>
 <div class="section" id="client-side">
 <h2>Client Side<a class="headerlink" href="#client-side" title="Permalink to this headline">¶</a></h2>
 <p>Get the ID:</p>
-<p><a class="reference external" href="https://www.digitalocean.com/community/tutorials/how-to-create-a-server-to-send-push-notifications-with-gcm-to-android-devices-using-python">https://www.digitalocean.com/community/tutorials/how-to-create-a-server-to-send-push-notifications-with-gcm-to-android-devices-using-python</a></p>
-<blockquote>
-<div><p>We need to create a Google API project to enable GCM for our app.</p>
-<p>Visit the Google Developers Console.</p>
-<p>If you’ve never created a developer account there, you may need to fill out a few details.</p>
-<p>Click Create Project.</p>
-<p>Enter a project name, then click Create.</p>
-<p>New Google API project</p>
-<p>Wait a few seconds for the new project to be created. Then, view your Project ID and Project Number on the upper left of the project page.</p>
-<p>Project ID and number</p>
-<p>Make a note of the Project Number. You’ll use it in your Android app client.</p>
-<p>Step Two - Enable GCM for Your Project
-Make sure your project is still selected in the Google Developers Console.</p>
-<p>In the sidebar on the left, select APIs &amp; auth.</p>
-<p>Choose APIs.</p>
-<p>In the displayed list of APIs, turn the Google Cloud Messaging for Android toggle to ON. Accept the terms of service.</p>
-<p>Google Cloud Messaging for Android should now be in the list of enabled APIs for this project.</p>
-<p>Google Cloud Messaging for Android enabled</p>
-<p>In the sidebar on the left, select APIs &amp; auth.</p>
-<p>Choose Credentials.</p>
-<p>Under Public API access, click Create new Key.</p>
-<p>Choose Server key.</p>
-<p>Enter your server’s IP address.</p>
-<p>Server key IP</p>
-<p>Click Create.</p>
-<p>Copy the API KEY. You’ll need to enter this on your server later.</p>
-<p>API KEY</p>
-</div></blockquote>
+<p><strong>Android</strong></p>
+<p><a class="reference external" href="https://developers.google.com/mobile/add">https://developers.google.com/mobile/add</a></p>
+<p><strong>iOS</strong></p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sudo gem install fastlane
+fastlane pem
+</pre></div>
+</div>
 <p>Add the following to the client:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">PushNotification</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;react-native-push-notification&#39;</span><span class="p">);</span>
 
+<span class="c1">// THIS PART GOES OUTSIDE ALL CLASSES !!!!!!!!!!</span>
+<span class="kr">export</span> <span class="kd">function</span> <span class="nx">postForm</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">p</span> <span class="k">in</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">str</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">form</span><span class="p">[</span><span class="nx">p</span><span class="p">]));</span>
+  <span class="p">}</span>
+  <span class="kr">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">body</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">req</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// THIS PART GOES IN constructor(props) !!!!!!!!!!!</span>
 <span class="nx">PushNotification</span><span class="p">.</span><span class="nx">configure</span><span class="p">({</span>
+    <span class="c1">// (optional) Called when Token is generated (iOS and Android)</span>
+    <span class="nx">onRegister</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+        <span class="nx">postForm</span><span class="p">(</span><span class="s1">&#39;http://192.168.0.120:5020/&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">token</span><span class="o">:</span> <span class="nx">t</span><span class="p">.</span><span class="nx">token</span><span class="p">})</span>
+    <span class="p">},</span>
 
-<span class="c1">// (optional) Called when Token is generated (iOS and Android)</span>
-<span class="nx">onRegister</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://mywebsite.com/endpoint/&#39;</span><span class="p">,</span> <span class="p">{</span>
-      <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-      <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s1">&#39;Accept&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-      <span class="p">},</span>
-      <span class="nx">body</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-        <span class="nx">token</span><span class="o">:</span> <span class="nx">t</span>
-      <span class="p">})</span>
-    <span class="p">})</span>
-<span class="p">},</span>
+    <span class="c1">// (required) Called when a remote or local notification is opened or received</span>
+    <span class="nx">onNotification</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">notification</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;NOTIFICATION:&#39;</span><span class="p">,</span> <span class="nx">notification</span> <span class="p">);</span>
+    <span class="p">},</span>
 
-<span class="c1">// (required) Called when a remote or local notification is opened or received</span>
-<span class="nx">onNotification</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">notification</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;NOTIFICATION:&#39;</span><span class="p">,</span> <span class="nx">notification</span> <span class="p">);</span>
-<span class="p">},</span>
+    <span class="c1">// ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)</span>
+    <span class="nx">senderID</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
 
-<span class="c1">// ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)</span>
-<span class="nx">senderID</span><span class="o">:</span> <span class="s2">&quot;YOUR GCM SENDER ID&quot;</span><span class="p">,</span>
+    <span class="c1">// IOS ONLY (optional): default: all - Permissions to register.</span>
+    <span class="nx">permissions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">badge</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">sound</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
 
-<span class="c1">// IOS ONLY (optional): default: all - Permissions to register.</span>
-<span class="nx">permissions</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">alert</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nx">badge</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nx">sound</span><span class="o">:</span> <span class="kc">true</span>
-<span class="p">},</span>
+    <span class="c1">// Should the initial notification be popped automatically</span>
+    <span class="c1">// default: true</span>
+    <span class="nx">popInitialNotification</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
 
-<span class="c1">// Should the initial notification be popped automatically</span>
-<span class="c1">// default: true</span>
-<span class="nx">popInitialNotification</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-
-<span class="cm">/**</span>
-<span class="cm">  * (optional) default: true</span>
-<span class="cm">  * - Specified if permissions (ios) and token (android and ios) will requested or not,</span>
-<span class="cm">  * - if not, you must call PushNotificationsHandler.requestPermissions() later</span>
-<span class="cm">  */</span>
-<span class="nx">requestPermissions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="cm">/**</span>
+<span class="cm">      * (optional) default: true</span>
+<span class="cm">      * - Specified if permissions (ios) and token (android and ios) will requested or not,</span>
+<span class="cm">      * - if not, you must call PushNotificationsHandler.requestPermissions() later</span>
+<span class="cm">      */</span>
+    <span class="nx">requestPermissions</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">});</span>
+</pre></div>
+</div>
+<p><strong>On Android, add the following to AndroidManifest.xml</strong></p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.WAKE_LOCK&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;permission</span>
+    <span class="na">android:name=</span><span class="s">&quot;${applicationId}.permission.C2D_MESSAGE&quot;</span>
+    <span class="na">android:protectionLevel=</span><span class="s">&quot;signature&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;${applicationId}.permission.C2D_MESSAGE&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.VIBRATE&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.RECEIVE_BOOT_COMPLETED&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>And then in the application brackets:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span>&lt;application ....&gt;
+    &lt;receiver
+        android:name=&quot;com.google.android.gms.gcm.GcmReceiver&quot;
+        android:exported=&quot;true&quot;
+        android:permission=&quot;com.google.android.c2dm.permission.SEND&quot; &gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;com.google.android.c2dm.intent.RECEIVE&quot; /&gt;
+            &lt;category android:name=&quot;${applicationId}&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/receiver&gt;
+
+    &lt;receiver android:name=&quot;com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher&quot; /&gt;
+    &lt;receiver android:name=&quot;com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/receiver&gt;
+    &lt;service android:name=&quot;com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService&quot;/&gt;
+    &lt;service
+        android:name=&quot;com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService&quot;
+        android:exported=&quot;false&quot; &gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;com.google.android.c2dm.intent.RECEIVE&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/service&gt;
 </pre></div>
 </div>
 </div>
 <div class="section" id="server-side">
 <h2>Server Side<a class="headerlink" href="#server-side" title="Permalink to this headline">¶</a></h2>
 <p>That’s it for the client side. Now for the server side:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyfcm</span> <span class="kn">import</span> <span class="n">FCMNotification</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gcm</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="c1">#from apns import APNs, Frame, Payload</span>
+<span class="kn">from</span> <span class="nn">izzati</span> <span class="kn">import</span> <span class="n">Backend</span>
 
-<span class="n">push_service</span> <span class="o">=</span> <span class="n">FCMNotification</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;&lt;api-key&gt;&quot;</span><span class="p">)</span>
+<span class="n">gcm</span> <span class="o">=</span> <span class="n">GCM</span><span class="p">(</span><span class="s2">&quot;AIzaSyBUXAxT9Nynnx6ZbQfjnZL9-Ep3d37wBxY&quot;</span><span class="p">)</span>
+<span class="c1">#apns = APNs(use_sandbox=True, cert_file=&#39;cert.pem&#39;)</span>
 
-<span class="c1"># Single device</span>
-<span class="n">registration_id</span> <span class="o">=</span> <span class="s2">&quot;&lt;device registration_id&gt;&quot;</span>
-<span class="n">message_title</span> <span class="o">=</span> <span class="s2">&quot;Uber update&quot;</span>
-<span class="n">message_body</span> <span class="o">=</span> <span class="s2">&quot;Hi john, your customized news for today is ready&quot;</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">push_service</span><span class="o">.</span><span class="n">notify_single_device</span><span class="p">(</span><span class="n">registration_id</span><span class="o">=</span><span class="n">registration_id</span><span class="p">,</span> <span class="n">message_title</span><span class="o">=</span><span class="n">message_title</span><span class="p">,</span> <span class="n">message_body</span><span class="o">=</span><span class="n">message_body</span><span class="p">)</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="c1"># Send to multiple devices by passing a list of ids.</span>
-<span class="n">registration_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;device registration_id 1&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;device registration_id 2&gt;&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-<span class="n">message_title</span> <span class="o">=</span> <span class="s2">&quot;Uber update&quot;</span>
-<span class="n">message_body</span> <span class="o">=</span> <span class="s2">&quot;Hope you&#39;re having fun this weekend, don&#39;t forget to check today&#39;s news&quot;</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">push_service</span><span class="o">.</span><span class="n">notify_multiple_devices</span><span class="p">(</span><span class="n">registration_ids</span><span class="o">=</span><span class="n">registration_ids</span><span class="p">,</span> <span class="n">message_title</span><span class="o">=</span><span class="n">message_title</span><span class="p">,</span> <span class="n">message_body</span><span class="o">=</span><span class="n">message_body</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">gcm</span><span class="p">,</span> <span class="n">tokens</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;token&#39;</span><span class="p">]</span>
+    <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tokens</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Test Notifications&#39;</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello!&#39;</span><span class="p">}</span>
+    <span class="c1">#payload = Payload(alert=&quot;Hello World!&quot;, sound=&quot;default&quot;, badge=1, mutable_content=True)</span>
+
+    <span class="c1">#apns.gateway_server.send_notification(token, payload)</span>
+    <span class="n">gcm</span><span class="o">.</span><span class="n">plaintext_request</span><span class="p">(</span><span class="n">registration_id</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">gcm</span><span class="o">.</span><span class="n">plaintext_request</span><span class="p">(</span><span class="n">registration_id</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>For more info on the data input:</p>
+<p><a class="reference external" href="https://developers.google.com/cloud-messaging/http-server-ref#notification-payload-support">https://developers.google.com/cloud-messaging/http-server-ref#notification-payload-support</a></p>
 <p>That’s it!</p>
 </div>
 </div>
@@ -288,7 +326,7 @@ Make sure your project is still selected in the Google Developers Console.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to kusti8’s notes’s documentation!</a></li>
+      <li>Previous: <a href="react.html" title="previous chapter">React Native - General</a></li>
   </ul></li>
 </ul>
 </div>
