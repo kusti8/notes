@@ -16,6 +16,16 @@ Essential Libraries
 Provides side menu, icons, and more: https://react-native-training.github.io/react-native-elements/
 **Usable in Expo**
 
+Android Emulator
+------------------
+
+On Arch: ``export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1`` to .bashrc
+
+Start emulator from /opt/android-sdk with ``emulator -avd "Pixel_API_23"``
+
+Make sure to install from Android Studio with AVD API version 23.
+Install Android Emulator package in SDK manager.
+
 
 Network POST w/ parameters
 -----------------------------
@@ -37,6 +47,7 @@ Network POST w/ parameters
       };
       return fetch(path, req);
     }
+
 
 Install Standalone
 ------------------------

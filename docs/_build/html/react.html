@@ -45,6 +45,24 @@
             
   <div class="section" id="react-native-general">
 <h1>React Native - General<a class="headerlink" href="#react-native-general" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Make a project: <code class="docutils literal"><span class="pre">react-native</span> <span class="pre">init</span></code> and then start editing.</p>
+<p>Build by running <code class="docutils literal"><span class="pre">react-native</span> <span class="pre">run-android</span></code> and <code class="docutils literal"><span class="pre">react-native</span> <span class="pre">start</span></code> first.</p>
+<p>Make sure <code class="docutils literal"><span class="pre">*.keystore</span></code> is in your .gitignore!!!</p>
+</div>
+<div class="section" id="essential-libraries">
+<h2>Essential Libraries<a class="headerlink" href="#essential-libraries" title="Permalink to this headline">¶</a></h2>
+<p>Provides side menu, icons, and more: <a class="reference external" href="https://react-native-training.github.io/react-native-elements/">https://react-native-training.github.io/react-native-elements/</a>
+<strong>Usable in Expo</strong></p>
+</div>
+<div class="section" id="android-emulator">
+<h2>Android Emulator<a class="headerlink" href="#android-emulator" title="Permalink to this headline">¶</a></h2>
+<p>On Arch: <code class="docutils literal"><span class="pre">export</span> <span class="pre">ANDROID_EMULATOR_USE_SYSTEM_LIBS=1</span></code> to .bashrc</p>
+<p>Start emulator from /opt/android-sdk with <code class="docutils literal"><span class="pre">emulator</span> <span class="pre">-avd</span> <span class="pre">&quot;Pixel_API_23&quot;</span></code></p>
+<p>Make sure to install from Android Studio with AVD API version 23.
+Install Android Emulator package in SDK manager.</p>
+</div>
 <div class="section" id="network-post-w-parameters">
 <h2>Network POST w/ parameters<a class="headerlink" href="#network-post-w-parameters" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">export</span> <span class="kd">function</span> <span class="nx">postForm</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
@@ -64,6 +82,14 @@
 <span class="p">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="install-standalone">
+<h2>Install Standalone<a class="headerlink" href="#install-standalone" title="Permalink to this headline">¶</a></h2>
+<p><strong>React Native</strong></p>
+<p>Android: <a class="reference external" href="https://facebook.github.io/react-native/docs/signed-apk-android.html">https://facebook.github.io/react-native/docs/signed-apk-android.html</a>
+iOS: <a class="reference external" href="https://facebook.github.io/react-native/docs/running-on-device.html#building-your-app-for-production">https://facebook.github.io/react-native/docs/running-on-device.html#building-your-app-for-production</a></p>
+<p><strong>Expo</strong></p>
+<p><a class="reference external" href="https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html">https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html</a></p>
 </div>
 <div class="section" id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
@@ -85,7 +111,11 @@ react-native start
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">React Native - General</a><ul>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#essential-libraries">Essential Libraries</a></li>
+<li><a class="reference internal" href="#android-emulator">Android Emulator</a></li>
 <li><a class="reference internal" href="#network-post-w-parameters">Network POST w/ parameters</a></li>
+<li><a class="reference internal" href="#install-standalone">Install Standalone</a></li>
 <li><a class="reference internal" href="#debugging">Debugging</a></li>
 </ul>
 </li>
