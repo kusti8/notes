@@ -1,6 +1,22 @@
 React Native - General
 ==========================
 
+Setup
+----------
+
+Make a project: ``react-native init`` and then start editing.
+
+Build by running ``react-native run-android`` and ``react-native start`` first.
+
+Make sure ``*.keystore`` is in your .gitignore!!!
+
+Essential Libraries
+----------------------
+
+Provides side menu, icons, and more: https://react-native-training.github.io/react-native-elements/
+**Usable in Expo**
+
+
 Network POST w/ parameters
 -----------------------------
 
@@ -21,6 +37,18 @@ Network POST w/ parameters
       };
       return fetch(path, req);
     }
+
+Install Standalone
+------------------------
+
+**React Native**
+
+Android: https://facebook.github.io/react-native/docs/signed-apk-android.html
+iOS: https://facebook.github.io/react-native/docs/running-on-device.html#building-your-app-for-production
+
+**Expo**
+
+https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html
 
 Debugging
 ---------------------
