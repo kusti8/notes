@@ -45,10 +45,34 @@
             
   <div class="section" id="react-native-general">
 <h1>React Native - General<a class="headerlink" href="#react-native-general" title="Permalink to this headline">¶</a></h1>
-<p>On Arch:</p>
+<div class="section" id="network-post-w-parameters">
+<h2>Network POST w/ parameters<a class="headerlink" href="#network-post-w-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">export</span> <span class="kd">function</span> <span class="nx">postForm</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">str</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">p</span> <span class="k">in</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">str</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">form</span><span class="p">[</span><span class="nx">p</span><span class="p">]));</span>
+  <span class="p">}</span>
+  <span class="kr">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span>
+    <span class="p">},</span>
+    <span class="nx">body</span>
+  <span class="p">};</span>
+  <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">req</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<p><strong>Error when starting package server (react-native start)</strong>
+On Arch to fix:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> fs.inotify.max_user_watches<span class="o">=</span><span class="m">524288</span> <span class="p">|</span> sudo tee -a /etc/sysctl.conf <span class="o">&amp;&amp;</span> sudo sysctl -p
 react-native start
 </pre></div>
+</div>
 </div>
 </div>
 
@@ -57,7 +81,16 @@ react-native start
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">React Native - General</a><ul>
+<li><a class="reference internal" href="#network-post-w-parameters">Network POST w/ parameters</a></li>
+<li><a class="reference internal" href="#debugging">Debugging</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>

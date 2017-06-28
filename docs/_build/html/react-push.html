@@ -59,6 +59,7 @@ pip install python-gcm apns
 <p><strong>Android</strong></p>
 <p><a class="reference external" href="https://developers.google.com/mobile/add">https://developers.google.com/mobile/add</a></p>
 <p><strong>iOS</strong></p>
+<p><a class="reference external" href="http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#app-transport-security">http://facebook.github.io/react-native/docs/integration-with-existing-apps.html#app-transport-security</a></p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sudo gem install fastlane
 fastlane pem
 </pre></div>
@@ -204,46 +205,87 @@ fastlane pem
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sudo pip install exponent_server_sdk izzati
 </pre></div>
 </div>
+<p><a class="reference external" href="https://docs.expo.io/versions/v18.0.0/guides/push-notifications.html">https://docs.expo.io/versions/v18.0.0/guides/push-notifications.html</a></p>
 </div>
 <div class="section" id="id2">
 <h2>Client Side<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="p">{</span> <span class="nx">Permissions</span><span class="p">,</span> <span class="nx">Notifications</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;expo&#39;</span><span class="p">;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span>import Expo from &#39;expo&#39;;
+import React from &#39;react&#39;;
+import { StyleSheet, Text, View } from &#39;react-native&#39;;
+import { Permissions, Notifications } from &#39;expo&#39;;
 
-<span class="kr">const</span> <span class="nx">PUSH_ENDPOINT</span> <span class="o">=</span> <span class="s1">&#39;https://your-server.com/users/push-token&#39;</span><span class="p">;</span>
+const PUSH_ENDPOINT = &#39;http://192.168.0.120:5020/&#39;;
 
-<span class="nx">async</span> <span class="kd">function</span> <span class="nx">registerForPushNotificationsAsync</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="p">{</span> <span class="nx">existingStatus</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">Permissions</span><span class="p">.</span><span class="nx">getAsync</span><span class="p">(</span><span class="nx">Permissions</span><span class="p">.</span><span class="nx">REMOTE_NOTIFICATIONS</span><span class="p">);</span>
-  <span class="kd">let</span> <span class="nx">finalStatus</span> <span class="o">=</span> <span class="nx">existingStatus</span><span class="p">;</span>
+export function postForm(path, form) {
+  const str = [];
+  for (let p in form) {
+    str.push(encodeURIComponent(p) + &quot;=&quot; + encodeURIComponent(form[p]));
+  }
+  const body = str.join(&quot;&amp;&quot;);
+  const req = {
+    method: &#39;post&#39;,
+    headers: {
+      &#39;Content-Type&#39;: &#39;application/x-www-form-urlencoded&#39;
+    },
+    body
+  };
+  return fetch(path, req);
+}
 
-  <span class="c1">// only ask if permissions have not already been determined, because</span>
-  <span class="c1">// iOS won&#39;t necessarily prompt the user a second time.</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">existingStatus</span> <span class="o">!==</span> <span class="s1">&#39;granted&#39;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Android remote notification permissions are granted during the app</span>
-    <span class="c1">// install, so this will only ask on iOS</span>
-    <span class="kr">const</span> <span class="p">{</span> <span class="nx">status</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">Permissions</span><span class="p">.</span><span class="nx">askAsync</span><span class="p">(</span><span class="nx">Permissions</span><span class="p">.</span><span class="nx">REMOTE_NOTIFICATIONS</span><span class="p">);</span>
-    <span class="nx">finalStatus</span> <span class="o">=</span> <span class="nx">status</span><span class="p">;</span>
-  <span class="p">}</span>
+async function registerForPushNotificationsAsync() {
+  const { existingStatus } = await Permissions.getAsync(Permissions.REMOTE_NOTIFICATIONS);
+  let finalStatus = existingStatus;
 
-  <span class="c1">// Stop here if the user did not grant permissions</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">finalStatus</span> <span class="o">!==</span> <span class="s1">&#39;granted&#39;</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
+  // only ask if permissions have not already been determined, because
+  // iOS won&#39;t necessarily prompt the user a second time.
+  if (existingStatus !== &#39;granted&#39;) {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.REMOTE_NOTIFICATIONS);
+    finalStatus = status;
+  }
 
-  <span class="c1">// Get the token that uniquely identifies this device</span>
-  <span class="kd">let</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">Notifications</span><span class="p">.</span><span class="nx">getExponentPushTokenAsync</span><span class="p">();</span>
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== &#39;granted&#39;) {
+    return;
+  }
 
-  <span class="c1">// POST the token to our backend so we can use it to send pushes from there</span>
-  <span class="k">return</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">PUSH_ENDPOINT</span><span class="p">,</span> <span class="p">{</span>
-    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-    <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
-      <span class="s1">&#39;Accept&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-      <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="nx">body</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-      <span class="nx">token</span><span class="o">:</span> <span class="nx">t</span>
-    <span class="p">}),</span>
-  <span class="p">});</span>
-<span class="p">}</span>
+  // Get the token that uniquely identifies this device
+  let t = await Notifications.getExponentPushTokenAsync();
+
+  // POST the token to our backend so we can use it to send pushes from there
+  return postForm(PUSH_ENDPOINT, {token: t})
+}
+
+class App extends React.Component {
+    state = {
+      notification: {},
+    };
+
+    componentWillMount() {
+      registerForPushNotificationsAsync();
+
+      // Handle notifications that are received or selected while the app
+      // is open. If the app was closed and then opened by tapping the
+      // notification (rather than just tapping the app icon to open it),
+      // this function will fire on the next tick after the app starts
+      // with the notification data.
+      this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    }
+
+    _handleNotification = (notification) =&gt; {
+      this.setState({notification: notification});
+    };
+
+    render() {
+      return (
+        &lt;View style={{flex: 1, justifyContent: &#39;center&#39;, alignItems: &#39;center&#39;}}&gt;
+          &lt;Text&gt;Origin: {this.state.notification.origin}&lt;/Text&gt;
+          &lt;Text&gt;Data: {JSON.stringify(this.state.notification.data)}&lt;/Text&gt;
+        &lt;/View&gt;
+      );
+    }
+}
 </pre></div>
 </div>
 </div>
@@ -258,10 +300,12 @@ fastlane pem
 <span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="kn">import</span> <span class="n">HTTPError</span>
 
 <span class="kn">from</span> <span class="nn">izzati</span> <span class="kn">import</span> <span class="n">Backend</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
 
 
 <span class="c1"># Basic arguments. You should extend this function with the push features you</span>
 <span class="c1"># want to use, or simply pass in a `PushMessage` object.</span>
+<span class="c1"># https://docs.expo.io/versions/v18.0.0/guides/push-notifications.html#http-2-api</span>
 <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">def</span> <span class="nf">send_push_message</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -292,7 +336,11 @@ fastlane pem
 
 <span class="k">def</span> <span class="nf">register_token</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">tokens</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;token&#39;</span><span class="p">])</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">send_push_message</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;token&#39;</span><span class="p">],</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+
 
 <span class="n">b</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">register_token</span><span class="p">)</span>
 <span class="n">b</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
