@@ -13,8 +13,10 @@ Welcome to kusti8's notes's documentation!
    react
    react-push
    react-sidebar
-   
+
    parse
+
+   mongodb
 
 
 Indices and tables

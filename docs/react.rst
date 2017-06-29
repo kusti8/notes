@@ -4,7 +4,9 @@ React Native - General
 Setup
 ----------
 
-Make a project: ``react-native init`` and then start editing.
+Make a project: ``react-native init <name>`` and then start editing.
+
+**Run ``npm install``**
 
 Build by running ``react-native run-android`` and ``react-native start`` first.
 
