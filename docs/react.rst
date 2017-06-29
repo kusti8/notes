@@ -14,6 +14,10 @@ Essential Libraries
 ----------------------
 
 Provides side menu, icons, and more: https://react-native-training.github.io/react-native-elements/
+
+**Usable in Expo**
+
+Provides side menu/drawer: https://github.com/root-two/react-native-drawer
 **Usable in Expo**
 
 Android Emulator
