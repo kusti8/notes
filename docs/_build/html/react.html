@@ -58,6 +58,7 @@
 <p><strong>Usable in Expo</strong></p>
 <p>Provides side menu/drawer: <a class="reference external" href="https://github.com/root-two/react-native-drawer">https://github.com/root-two/react-native-drawer</a>
 <strong>Usable in Expo</strong></p>
+<p>Resizes images: <a class="reference external" href="https://github.com/bamlab/react-native-image-resizer">https://github.com/bamlab/react-native-image-resizer</a></p>
 </div>
 <div class="section" id="android-emulator">
 <h2>Android Emulator<a class="headerlink" href="#android-emulator" title="Permalink to this headline">¶</a></h2>
@@ -96,12 +97,17 @@ iOS: <a class="reference external" href="https://facebook.github.io/react-native
 </div>
 <div class="section" id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
-<p><strong>Error when starting package server (react-native start)</strong>
+<p><strong>Error when starting package server (react-native start) ENOSPC</strong>
 On Arch to fix:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> fs.inotify.max_user_watches<span class="o">=</span><span class="m">524288</span> <span class="p">|</span> sudo tee -a /etc/sysctl.conf <span class="o">&amp;&amp;</span> sudo sysctl -p
 react-native start
 </pre></div>
 </div>
+<p><strong>Error when running react-native-image-picker</strong></p>
+<p>Right click in Android studio on the module and change API version to 23.
+After, re-edit gradle file and change gradle version to 2.2.+
+And edit gradle distro URL again also.
+<strong>Put all testCompiles on individual lines in build.gradle (app)</strong></p>
 </div>
 </div>
 

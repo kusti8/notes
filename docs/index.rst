@@ -13,6 +13,8 @@ Welcome to kusti8's notes's documentation!
    react
    react-push
    react-sidebar
+   react-image-picker
+   react-image-resizer
 
    parse
 

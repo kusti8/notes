@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>React Native - Image Picker &#8212; kusti8&#39;s notes 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="React Native - Image Resize" href="react-image-resizer.html" />
+    <link rel="prev" title="React Native - Sidebar" href="react-sidebar.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="react-native-image-picker">
+<h1>React Native - Image Picker<a class="headerlink" href="#react-native-image-picker" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>npm install react-native-image-picker@latest --save
+react-native link
+</pre></div>
+</div>
+<p><strong>iOS</strong></p>
+<p>1. For iOS 10+, Add the <code class="docutils literal"><span class="pre">NSPhotoLibraryUsageDescription</span></code>, <code class="docutils literal"><span class="pre">NSCameraUsageDescription</span></code>,
+and <code class="docutils literal"><span class="pre">NSMicrophoneUsageDescription</span></code> (if allowing video) keys to your <code class="docutils literal"><span class="pre">Info.plist</span></code>
+with strings describing why your app needs these permissions.</p>
+<p><strong>Android</strong></p>
+<ol class="arabic simple">
+<li>Update <code class="docutils literal"><span class="pre">android/build.gradle</span></code></li>
+</ol>
+<div class="highlight-gradle"><div class="highlight"><pre><span></span>buildscript {
+    ...
+    dependencies {
+        classpath &#39;com.android.tools.build:gradle:2.2.+&#39; // &lt;- USE 2.2.+ version
+    }
+    ...
+}
+...
+</pre></div>
+</div>
+<p>2. Update URL in <code class="docutils literal"><span class="pre">android/gradle/wrapper/gradle-wrapper.properties</span></code>
+to <code class="docutils literal"><span class="pre">distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip</span></code></p>
+<ol class="arabic simple" start="3">
+<li>Add permissions to AndroidManifest.xml</li>
+</ol>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.CAMERA&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;</span><span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">ImagePicker</span> <span class="nx">from</span> <span class="s1">&#39;react-native-image-picker&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Select Image&#39;</span><span class="p">,</span>
+    <span class="nx">storageOptions</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">skipBackup</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;images&#39;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">ImagePicker</span><span class="p">.</span><span class="nx">showImagePicker</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Response = &#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">didCancel</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;User cancelled image picker&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;ImagePicker Error: &#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">customButton</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;User tapped custom button: &#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">customButton</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">uri</span><span class="o">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">uri</span> <span class="p">};</span>
+
+    <span class="c1">// You can also display the image using data:</span>
+    <span class="c1">// let source = { uri: &#39;data:image/jpeg;base64,&#39; + response.data };</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span>
+      <span class="nx">avatarSource</span><span class="o">:</span> <span class="nx">source</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/react-community/react-native-image-picker">https://github.com/react-community/react-native-image-picker</a></li>
+<li><a class="reference external" href="https://github.com/ivpusic/react-native-image-crop-picker">https://github.com/ivpusic/react-native-image-crop-picker</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">React Native - Image Picker</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="react-sidebar.html" title="previous chapter">React Native - Sidebar</a></li>
+      <li>Next: <a href="react-image-resizer.html" title="next chapter">React Native - Image Resize</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/react-image-picker.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Gustav Hansen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/react-image-picker.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

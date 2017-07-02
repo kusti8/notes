@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>React Native - Image Resize &#8212; kusti8&#39;s notes 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parse Server" href="parse.html" />
+    <link rel="prev" title="React Native - Image Picker" href="react-image-picker.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="react-native-image-resize">
+<h1>React Native - Image Resize<a class="headerlink" href="#react-native-image-resize" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>npm install --save react-native-image-resizer
+react-native link react-native-image-resizer
+</pre></div>
+</div>
+<p>Note: on latest versions of React Native, you may have an error during the
+Gradle build on Android
+(<code class="docutils literal"><span class="pre">com.android.dex.DexException:</span> <span class="pre">Multiple</span> <span class="pre">dex</span> <span class="pre">files</span> <span class="pre">define</span> <span class="pre">Landroid/support/v7/appcompat/R$anim</span></code>).
+Run <code class="docutils literal"><span class="pre">cd</span> <span class="pre">android</span> <span class="pre">&amp;&amp;</span> <span class="pre">./gradlew</span> <span class="pre">clean</span></code> to fix this.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="kr">import</span> <span class="nx">ImageResizer</span> <span class="nx">from</span> <span class="s1">&#39;react-native-image-resizer&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">compressFormat</span> <span class="o">=</span> <span class="s1">&#39;JPEG&#39;</span> <span class="c1">// or &#39;PNG&#39;</span>
+<span class="kd">let</span> <span class="nx">quality</span> <span class="o">=</span> <span class="mi">80</span> <span class="c1">// out of 100</span>
+
+<span class="nx">ImageResizer</span><span class="p">.</span><span class="nx">createResizedImage</span><span class="p">(</span><span class="nx">imageUri</span><span class="p">,</span> <span class="nx">newWidth</span><span class="p">,</span> <span class="nx">newHeight</span><span class="p">,</span> <span class="nx">compressFormat</span><span class="p">,</span> <span class="nx">quality</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resizedImageUri</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// resizeImageUri is the URI of the new image that can now be displayed, uploaded...</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// Oops, something went wrong. Check that the filename is correct and</span>
+  <span class="c1">// inspect err to get more details.</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>WARNING:</strong> On Android, <code class="docutils literal"><span class="pre">file:</span></code> will be prepended to the returned</dt>
+<dd><p class="first">string. This allows it to be displayed as an image, but it also
+means you <a class="reference external" href="https://github.com/bamlab/react-native-image-resizer/issues/50">won’t be able to access the file directly</a> when using a
+utility like <code class="docutils literal"><span class="pre">fs</span></code>. To do so, you can simply use
+<code class="docutils literal"><span class="pre">rawPath</span> <span class="pre">=</span> <span class="pre">originalPath.replace('file:',</span> <span class="pre">'')</span></code> to get the raw path.</p>
+<table border="1" class="last docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>path</td>
+<td>Path of image file, or a base64 encoded image string prefixed with ‘<a class="reference external" href="data:image/imagetype;base64">data:image/imagetype;base64</a>,’ where imagetype is jpeg or png.</td>
+</tr>
+<tr class="row-odd"><td>maxWidth</td>
+<td>Image max width (ratio is preserved)</td>
+</tr>
+<tr class="row-even"><td>maxHeight</td>
+<td>Image max height (ratio is preserved)</td>
+</tr>
+<tr class="row-odd"><td>compressFormat</td>
+<td>JPEG, PNG, or WEBP (Android only)</td>
+</tr>
+<tr class="row-even"><td>quality</td>
+<td>A number between 0 and 100 used for JPEG compression</td>
+</tr>
+<tr class="row-odd"><td>rotation</td>
+<td>Rotation to apply to the image, in degrees, for android. On iOS, rotation is limited (and rounded) to multiples of 90 degrees.</td>
+</tr>
+<tr class="row-even"><td>outputPath</td>
+<td>The resized image path. If null, resized image will be stored in cache folder. To set outputPath make sure to add option for rotation too (if no rotation is needed, just set it to 0).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">ImageResizer</span><span class="p">.</span><span class="nx">createResizedImage</span><span class="p">(</span><span class="nx">datauri</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="s1">&#39;JPEG&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">resizedImageUri</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Izzati</span><span class="p">(</span><span class="s2">&quot;http://192.168.1.17:5020/&quot;</span><span class="p">)</span>
+    <span class="nx">i</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="p">{</span><span class="nx">hello</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">},</span> <span class="nx">file</span><span class="o">:</span> <span class="p">{</span><span class="nx">uri</span><span class="o">:</span> <span class="nx">resizedImageUri</span><span class="p">,</span> <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;photo.jpg&#39;</span><span class="p">},</span> <span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">base64</span><span class="o">:</span> <span class="kc">false</span><span class="p">}},</span> <span class="p">(</span><span class="nx">out</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">(</span><span class="nx">previous</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span><span class="nx">uri</span><span class="o">:</span> <span class="nx">i</span><span class="p">.</span><span class="nx">prefixPath</span><span class="p">(</span><span class="nx">out</span><span class="p">.</span><span class="nx">path</span><span class="p">)}</span>
+      <span class="p">})</span>
+    <span class="p">})</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">React Native - Image Resize</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="react-image-picker.html" title="previous chapter">React Native - Image Picker</a></li>
+      <li>Next: <a href="parse.html" title="next chapter">Parse Server</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/react-image-resizer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Gustav Hansen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/react-image-resizer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
