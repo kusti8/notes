@@ -1,9 +1,9 @@
-.. kusti8's notes documentation master file, created by
+.. kusti8's notes master file, created by
    sphinx-quickstart on Tue Jun 27 11:02:45 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to kusti8's notes's documentation!
+Welcome to kusti8's notes!
 ==========================================
 
 .. toctree::
@@ -15,6 +15,7 @@ Welcome to kusti8's notes's documentation!
    react-sidebar
    react-image-picker
    react-image-resizer
+   react-share
 
    parse
 
