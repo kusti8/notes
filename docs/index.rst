@@ -16,6 +16,7 @@ Welcome to kusti8's notes!
    react-image-picker
    react-image-resizer
    react-share
+   react-ignite-thunk
 
    parse
 
