@@ -22,6 +22,8 @@ Welcome to kusti8's notes!
 
    mongodb
 
+   esp8266
+
 
 Indices and tables
 ==================
