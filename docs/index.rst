@@ -10,6 +10,8 @@ Welcome to kusti8's notes!
    :maxdepth: 2
    :caption: Contents:
 
+   android-things
+
    react
    react-push
    react-sidebar
