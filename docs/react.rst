@@ -153,3 +153,13 @@ FlatList
             keyExtractor={(item, index) => index}
         />
     </List>
+
+Navigation Button - Top Right
+--------------------------------
+
+.. code-block:: javascript
+
+  static navigationOptions = ({navigation}) => ({
+    title: 'YTDownload',
+    headerRight: <Icon name="add" style={{paddingRight: 15}} size={35} onPress={() => navigation.navigate('DownloadScreen')} />
+  })
